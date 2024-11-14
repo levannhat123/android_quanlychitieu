@@ -22,7 +22,7 @@ public class Singup extends AppCompatActivity {
 
         editsigup=findViewById(R.id.btn_signup);
         editsigup.setOnClickListener(v -> {
-            Intent intent = new Intent(Singup.this, MainActivity.class);
+            Intent intent = new Intent(Singup.this, tablayout_khoanchi.class);
             startActivity(intent);
         });
     }
