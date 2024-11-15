@@ -56,7 +56,7 @@ public class tablayout_khoanchi extends AppCompatActivity {
         if (username == null || username.isEmpty()) {
             username = "Guest"; // Tên mặc định nếu không đăng nhập
         }
-        usernameTextView.setText(" UserName :"+username);
+        usernameTextView.setText(""+username);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
