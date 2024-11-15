@@ -11,7 +11,6 @@
         android:id="@+id/avatar"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:layout_gravity="center_horizontal"
         android:src="@drawable/anh"
         android:contentDescription="User Avatar"
         android:scaleType="centerCrop"
@@ -21,21 +20,11 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="Test"
-        android:textColor="#090909"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/user_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
-        android:text="Test@gmail.com"
-        android:textColor="#090909"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+
 </LinearLayout>

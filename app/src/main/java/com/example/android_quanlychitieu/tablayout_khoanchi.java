@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,7 @@ public class tablayout_khoanchi extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         mtabLayout = findViewById(R.id.tab_layout);
         mviewPage = findViewById(R.id.viewpager);
+        //lấy name từ database
         String username = getIntent().getStringExtra("name");
 
 
@@ -48,6 +50,13 @@ public class tablayout_khoanchi extends AppCompatActivity {
         });
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        //gan name vào text để hiện thị
+        View headerView = navigationView.getHeaderView(0);
+        TextView usernameTextView = headerView.findViewById(R.id.username);
+        if (username == null || username.isEmpty()) {
+            username = "Guest"; // Tên mặc định nếu không đăng nhập
+        }
+        usernameTextView.setText(" UserName :"+username);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
