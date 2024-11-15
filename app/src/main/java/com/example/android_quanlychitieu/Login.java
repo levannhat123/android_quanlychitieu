@@ -37,7 +37,12 @@ public class Login extends AppCompatActivity {
 //            Intent intent = new Intent(Login.this, Singup.class);
 //            startActivity(intent);
             boolean isloggetId=database.checUser(name,pass);
+            if (!isValidPassword(pass)) {
+                Toast.makeText(Login.this, "Invalid password. Use 6 characters .", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if(isloggetId){
+
                 Toast.makeText(Login.this, "User Login Success", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Login.this, tablayout_khoanchi.class);
            startActivity(intent);
@@ -47,6 +52,10 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+    private boolean isValidPassword(String password) {
+        return password.length() >= 6 ;
 
     }
 }
