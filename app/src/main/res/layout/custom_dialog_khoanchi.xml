@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="16dp"
-            android:text="Thêm mới khoản chi"
+            android:text="THÊM KHOẢN CHI"
             android:textColor="#ffffff"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
             android:text="Tên khoản chi"
-            android:textColor="#616161"
+            android:textColor="#090909"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -54,7 +54,8 @@
                 android:background="@null"
                 android:ems="10"
                 android:hint="Nhập Khoản chi"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColorHint="#090909" />
         </LinearLayout>
 
         <!-- Income Type -->
@@ -70,7 +71,7 @@
                 android:paddingRight="30sp"
                 android:paddingBottom="4dp"
                 android:text="Loại Chi"
-                android:textColor="#616161"
+                android:textColor="#090909"
                 android:textSize="16sp" />
 
             <Spinner
@@ -89,7 +90,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
             android:text="Ngày chi"
-            android:textColor="#616161"
+            android:textColor="#090909"
             android:textSize="16sp" />
 
         <EditText
@@ -99,7 +100,8 @@
             android:background="@drawable/boder"
             android:hint="Nhập ngày chi"
             android:inputType="date"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColorHint="#090909" />
 
         <!-- Amount of Money -->
         <TextView
@@ -108,7 +110,8 @@
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
             android:text="Số tiền"
-            android:textColor="#616161"
+            android:textColor="#090909"
+            android:textColorHint="#090909"
             android:textSize="16sp" />
 
         <EditText
@@ -118,7 +121,8 @@
             android:background="@drawable/boder"
             android:hint="Nhập số tiền"
             android:inputType="numberDecimal"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColorHint="#090909" />
 
         <!-- Full Name -->
         <TextView
@@ -127,7 +131,8 @@
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
             android:text="Họ tên"
-            android:textColor="#616161"
+            android:textColor="#090909"
+            android:textColorHint="#090909"
             android:textSize="16sp" />
 
         <EditText
@@ -136,7 +141,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/boder"
             android:hint="Nhập họ tên"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColorHint="#090909" />
 
         <!-- Notes -->
         <TextView
@@ -145,7 +151,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
             android:text="Ghi chú"
-            android:textColor="#616161"
+            android:textColor="#090909"
             android:textSize="16sp" />
 
         <EditText
@@ -154,7 +160,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/boder"
             android:hint="Nhập ghi chú"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColorHint="#090909" />
     </LinearLayout>
 
 </LinearLayout>

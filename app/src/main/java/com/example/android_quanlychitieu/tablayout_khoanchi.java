@@ -114,5 +114,6 @@ public class tablayout_khoanchi extends AppCompatActivity {
         mviewPage.setAdapter(viewPageAdapter);
         viewPageAdapter.notifyDataSetChanged();
         mtabLayout.setupWithViewPager(mviewPage);
+
     }
 }

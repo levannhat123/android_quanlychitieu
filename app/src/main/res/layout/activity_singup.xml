@@ -38,9 +38,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:layout_weight="1"
-                android:text="Signup"
+                android:background="#F6EFEF"
+                android:text="ĐĂNG KÍ"
                 android:textAlignment="center"
-                android:textSize="48sp" />
+                android:textColor="#EF0909"
+                android:textSize="45sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,7 +65,8 @@
                 android:ems="10"
                 android:hint="Nhập Name"
                 android:inputType="text"
-                android:textColor="#232222" />
+                android:textColor="#090909"
+                android:textColorHint="#090909" />
         </LinearLayout>
 
         <LinearLayout
@@ -84,7 +88,8 @@
                 android:ems="10"
                 android:hint="Nhập PassWord"
                 android:inputType="textPassword"
-                android:textColor="#232222" />
+                android:textColor="#090909"
+                android:textColorHint="#090909" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,19 +110,21 @@
                 android:ems="10"
                 android:hint="Nhập Lại PassWord"
                 android:inputType="textPassword"
-                android:textColor="#232222" />
+                android:textColor="#090909"
+                android:textColorHint="#090909" />
         </LinearLayout>
 
         <!-- Button Login -->
         <Button
             android:id="@+id/btn_signup"
-            android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_width="381dp"
+            android:layout_height="63dp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="#6200EE"
-            android:text="SignUp"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:backgroundTint="#2196F3"
+            android:text="Đăng Kí"
+            android:textColor="#111111"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
         <LinearLayout
@@ -131,18 +138,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Don't have any account? "
-                android:textColor="#000000"
-                android:textSize="14sp"/>
+                android:textColor="#F40606"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/text_resend1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="Login"
                 android:textColor="#2196F3"
                 android:textSize="14sp"
-                android:clickable="true"
-                android:focusable="true" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 
