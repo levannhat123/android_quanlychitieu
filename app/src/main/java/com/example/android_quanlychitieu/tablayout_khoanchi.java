@@ -32,6 +32,8 @@ public class tablayout_khoanchi extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         mtabLayout = findViewById(R.id.tab_layout);
         mviewPage = findViewById(R.id.viewpager);
+        String username = getIntent().getStringExtra("name");
+
 
         ImageView menuIcon = findViewById(R.id.menu_icon);
         menuIcon.setOnClickListener(new View.OnClickListener() {

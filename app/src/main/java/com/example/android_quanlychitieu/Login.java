@@ -37,6 +37,10 @@ public class Login extends AppCompatActivity {
 //            Intent intent = new Intent(Login.this, Singup.class);
 //            startActivity(intent);
             boolean isloggetId=database.checUser(name,pass);
+            if (!isValidName(name)) {
+                Toast.makeText(Login.this, "Invalid name. Use 6 characters .", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!isValidPassword(pass)) {
                 Toast.makeText(Login.this, "Invalid password. Use 6 characters .", Toast.LENGTH_SHORT).show();
                 return;
@@ -45,6 +49,7 @@ public class Login extends AppCompatActivity {
 
                 Toast.makeText(Login.this, "User Login Success", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Login.this, tablayout_khoanchi.class);
+                intent.putExtra("name", name);
            startActivity(intent);
 //                editName.setText("");
 //                editPass.setText("");
@@ -56,6 +61,10 @@ public class Login extends AppCompatActivity {
     }
     private boolean isValidPassword(String password) {
         return password.length() >= 6 ;
+
+    }
+    private boolean isValidName(String name) {
+        return name.length() >= 6 ;
 
     }
 }
