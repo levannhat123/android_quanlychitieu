@@ -42,6 +42,8 @@ public class LoaichiFragment extends Fragment {
             public void onClick(View v) {
                 // Hiển thị hộp thoại thêm mới khi nhấn vào FAB
                 showAddDialog();
+
+                ///addd
             }
         });
 

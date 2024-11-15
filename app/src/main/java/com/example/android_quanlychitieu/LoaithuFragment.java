@@ -76,7 +76,6 @@ public class LoaithuFragment extends Fragment {
         return view;
     }
     private void showAddDialog() {
-        //a
         // Tạo AlertDialog.Builder với context từ Fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
