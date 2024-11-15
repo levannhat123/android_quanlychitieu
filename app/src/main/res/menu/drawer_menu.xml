@@ -7,7 +7,7 @@
             android:title="Khoản thu"/>
         <item
             android:id="@+id/nav_khoanchi"
-            android:icon="@drawable/khoanchi"
+            android:icon="@drawable/bit"
             android:title="Khoản chi"/>
         <item
             android:id="@+id/nav_thongke"

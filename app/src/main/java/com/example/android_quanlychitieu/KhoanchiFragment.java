@@ -104,13 +104,14 @@ public class KhoanchiFragment extends Fragment {
             }
         });
 
+
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-//nhât
+
         // Hiển thị AlertDialog
         builder.create().show();
     }
