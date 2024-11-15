@@ -41,7 +41,14 @@ public class Singup extends AppCompatActivity {
                     Toast.makeText(Singup.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (!isValidPassword(pass)) {
+                    Toast.makeText(Singup.this, "Invalid password. Use 6 characters .", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!isValidPassword(passcofi)) {
+                    Toast.makeText(Singup.this, "Invalid password. Use 6 characters .", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!pass.equals(passcofi)) {
                     Toast.makeText(Singup.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                     return;
@@ -63,6 +70,10 @@ public class Singup extends AppCompatActivity {
             }
         });
 
+
+    }
+    private boolean isValidPassword(String password) {
+        return password.length() >= 6 ;
 
     }
 }
