@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class PageFragment extends Fragment {
+public class KhoanchiFragment extends Fragment {
 
 
-
-    public PageFragment() {
+    public KhoanchiFragment() {
         // Required empty public constructor
     }
+
 
 
 
@@ -25,6 +25,8 @@ public class PageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_page, container, false);
+
+
+        return inflater.inflate(R.layout.fragment_khoanchi, container, false);
     }
 }

@@ -5,40 +5,33 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import java.util.List;
+
 public class ViewPage extends FragmentStatePagerAdapter {
 
-    public ViewPage(@NonNull FragmentManager fm, int behavior) {
+    private final List<Fragment> fragments;
+    private final List<String> titles;
+
+    public ViewPage(@NonNull FragmentManager fm, int behavior, List<Fragment> fragments, List<String> titles) {
         super(fm, behavior);
+        this.fragments = fragments;
+        this.titles = titles;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return new HomeFragment();
-            case 1:
-                return new PageFragment();
-            default:
-                return new HomeFragment();
-        }
+        return fragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return 2; // Số lượng các trang
+        return fragments.size();
     }
 
     @NonNull
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "Khoản Chi";
-            case 1:
-                return "Loại Chi";
-            default:
-                return "";
-        }
+        return titles.get(position);
     }
 }
