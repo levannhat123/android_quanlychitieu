@@ -57,6 +57,8 @@ public class tablayout_khoanchi extends AppCompatActivity {
                     setupTabLayoutKhoanchi(); // Khi chọn "Khoản Chi"
                 } else if (id==R.id.nav_thongke) {
                     setupTabLayoutThongke();
+                } else if (id==R.id.nav_thoat) {
+                    finish();
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
