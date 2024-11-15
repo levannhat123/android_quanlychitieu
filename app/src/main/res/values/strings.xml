@@ -1,8 +1,4 @@
 <resources>
     <string name="app_name">Android_quanLyChiTieu</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Home</string>
-    <string name="hello_nhat">page</string>
-    <string name="open">Open Navigation Drawer</string>
-    <string name="close">Close Navigation Drawer</string>
 </resources>
