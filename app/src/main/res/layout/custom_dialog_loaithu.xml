@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="16dp"
-            android:text="Thêm Mới Loại Thu"
+            android:text="Thêm mới khoản chi"
             android:textColor="#ffffff"
             android:textSize="22sp"
             android:textStyle="bold" />
