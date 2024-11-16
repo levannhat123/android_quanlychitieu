@@ -46,7 +46,6 @@ public class Login extends AppCompatActivity {
                 return;
             }
             if(isloggetId){
-
                 Toast.makeText(Login.this, "User Login Success", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Login.this, tablayout_khoanchi.class);
                 intent.putExtra("name", name);
@@ -67,4 +66,5 @@ public class Login extends AppCompatActivity {
         return name.length() >= 6 ;
 
     }
+
 }

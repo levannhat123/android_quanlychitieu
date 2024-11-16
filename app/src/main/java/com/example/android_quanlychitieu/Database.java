@@ -17,8 +17,10 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create Table users(name TEXT primary key, password TEXT)");
+        db.execSQL("CREATE TABLE users(name TEXT PRIMARY KEY, password TEXT)");
+        db.execSQL("CREATE TABLE loaithu(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, user_name TEXT NOT NULL)");
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -55,5 +57,6 @@ public class Database extends SQLiteOpenHelper {
             return false;
         }
     }
+
 
 }
