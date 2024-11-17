@@ -1,5 +1,6 @@
 package com.example.android_quanlychitieu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -26,6 +27,7 @@ public class AddLoaiThu extends AppCompatActivity {
         userId = getIntent().getIntExtra("user_id", -1);
         if (userId == -1) {
             Toast.makeText(this, "Không xác định được người dùng!", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
@@ -42,7 +44,7 @@ public class AddLoaiThu extends AppCompatActivity {
                 Toast.makeText(this, "Thêm loại thu thành công!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddLoaiThu.this, LoaithuFragment.class);
                 intent.putExtra("user_id", userId);  // Truyền user_id khi quay lại TaskActivity
-                startActivity(intent);
+                setResult(Activity.RESULT_OK, intent);
                 finish();
             } else {
                 Toast.makeText(this, "Thêm loại thu thất bại!", Toast.LENGTH_SHORT).show();

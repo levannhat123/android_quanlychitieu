@@ -1,5 +1,6 @@
 package com.example.android_quanlychitieu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -46,9 +47,12 @@ public class LoaithuFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadLoaithu(userId);
-        loaithuAdapter.notifyDataSetChanged();
+        if (loaithuAdapter != null) {
+            loadLoaithu(userId);
+            loaithuAdapter.notifyDataSetChanged();
+        }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +83,7 @@ public class LoaithuFragment extends Fragment {
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), AddLoaiThu.class);
             intent.putExtra("user_id", userId);
-            startActivity(intent);
+            ((Activity) getContext()).startActivityForResult(intent, 1);
         });
 
 
