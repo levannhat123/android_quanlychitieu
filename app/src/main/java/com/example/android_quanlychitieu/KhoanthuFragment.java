@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 
@@ -90,17 +88,17 @@ public class KhoanthuFragment extends Fragment {
         LayoutInflater inflater = getLayoutInflater();
 
         // Inflate layout tùy chỉnh cho Dialog
-        View dialogView = inflater.inflate(R.layout.custom_dialog, null);
-        builder.setView(dialogView);
-
-        // Tìm các thành phần trong layout tùy chỉnh
-        EditText etTenKhoanThu = dialogView.findViewById(R.id.etTenKhoanThu);
-        EditText etNgayThu = dialogView.findViewById(R.id.etNgayThu);
-        EditText etTien = dialogView.findViewById(R.id.etTien);
-        EditText etHoTen = dialogView.findViewById(R.id.etHoTen);
-        EditText etGhiChu = dialogView.findViewById(R.id.etGhiChu);
+//        View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+//        builder.setView(dialogView);
+//
+//        // Tìm các thành phần trong layout tùy chỉnh
+//        EditText etTenKhoanThu = dialogView.findViewById(R.id.etTenKhoanThu);
+//        EditText etNgayThu = dialogView.findViewById(R.id.etNgayThu);
+//        EditText etTien = dialogView.findViewById(R.id.etTien);
+//        EditText etHoTen = dialogView.findViewById(R.id.etHoTen);
+//        EditText etGhiChu = dialogView.findViewById(R.id.etGhiChu);
         // Inside your Fragment or Activity
-        Spinner spLoaiThu = dialogView.findViewById(R.id.spLoaiThu);
+//        Spinner spLoaiThu = dialogView.findViewById(R.id.spLoaiThu);
 
 // Dữ liệu cho Spinner
         List<String> loaiThuList = new ArrayList<>();
@@ -118,24 +116,24 @@ public class KhoanthuFragment extends Fragment {
 
 
 // Thiết lập layout dropdown cho Spinner
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spLoaiThu.setAdapter(adapter);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spLoaiThu.setAdapter(adapter);
 
 
         // Thiết lập các nút cho Dialog
-        builder.setPositiveButton("THÊM MỚI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Lấy dữ liệu từ các trường và xử lý logic
-                String tenKhoanThu = etTenKhoanThu.getText().toString().trim();
-                String ngayThu = etNgayThu.getText().toString().trim();
-                String tien = etTien.getText().toString().trim();
-                String hoTen = etHoTen.getText().toString().trim();
-                String ghiChu = etGhiChu.getText().toString().trim();
-
-                // Xử lý logic thêm mới
-            }
-        });
+//        builder.setPositiveButton("THÊM MỚI", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Lấy dữ liệu từ các trường và xử lý logic
+//                String tenKhoanThu = etTenKhoanThu.getText().toString().trim();
+//                String ngayThu = etNgayThu.getText().toString().trim();
+//                String tien = etTien.getText().toString().trim();
+//                String hoTen = etHoTen.getText().toString().trim();
+//                String ghiChu = etGhiChu.getText().toString().trim();
+//
+//                // Xử lý logic thêm mới
+//            }
+//        });
 
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
