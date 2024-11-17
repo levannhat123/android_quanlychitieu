@@ -1,74 +1,80 @@
 package com.example.android_quanlychitieu;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.BaseAdapter;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class LoaiThuAdapter extends BaseAdapter {
-    private Context context;
-    private List<LoaiThu> loaiThuList;
-    private OnItemClickListener listener;
+public class LoaiThuAdapter extends ArrayAdapter<LoaiThu> {
 
-    public interface OnItemClickListener {
-        void onEditClick(int position);
-        void onDeleteClick(int position);
+    public LoaiThuAdapter(@NonNull Context context, @NonNull List<LoaiThu> loaithu) {
+        super(context, 0, loaithu);
     }
 
-    public LoaiThuAdapter(Context context, List<LoaiThu> loaiThuList, OnItemClickListener listener) {
-        this.context = context;
-        this.loaiThuList = loaiThuList;
-        this.listener = listener;
-    }
-
+    @NonNull
     @Override
-    public int getCount() {
-        return loaiThuList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return loaiThuList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_loaithu, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_loaithu, parent, false);
         }
 
-        LoaiThu loaiThu = loaiThuList.get(position);
+        LoaiThu loaiThu = getItem(position);
 
         TextView tvLoaiThuId = convertView.findViewById(R.id.tvLoaiThuId);
         TextView tvLoaiThuName = convertView.findViewById(R.id.tvLoaiThuName);
         ImageButton btnEdit = convertView.findViewById(R.id.btn_edit);
         ImageButton btnDelete = convertView.findViewById(R.id.btn_delete);
 
-        tvLoaiThuId.setText(String.valueOf(loaiThu.getId()));
-        tvLoaiThuName.setText(loaiThu.getName());
+        if (loaiThu != null) {
+            tvLoaiThuId.setText(String.valueOf(loaiThu.getId()));
+            tvLoaiThuName.setText(loaiThu.getName());
 
-        btnEdit.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onEditClick(position);
-            }
-        });
+            btnEdit.setOnClickListener(v -> {
+                Intent intent = new Intent(getContext(), EditLoaithu.class);
+                intent.putExtra("user_id", loaiThu.getUserId());
+                intent.putExtra("loaithu_id", loaiThu.getId());
+                intent.putExtra("loaithu_name", loaiThu.getName());
+                ((Activity) getContext()).startActivityForResult(intent, 1);
+            });
+            btnDelete.setOnClickListener(v -> {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Bạn có chắc chắn muốn xóa loại thu này?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
 
-        btnDelete.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onDeleteClick(position);
-            }
-        });
+                            Database db = new Database(getContext());
+                            boolean isDeleted = db.deleteLoaithu(loaiThu.getId());
+                            if (isDeleted) {
+                                Toast.makeText(getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                                remove(loaiThu);
+                                notifyDataSetChanged(); // Cập nhật giao diện
+                            } else {
+                                Toast.makeText(getContext(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                            }
 
+                        })
+                        .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                        .show();
+
+            });
+
+
+
+        }
         return convertView;
     }
+
+
 }
