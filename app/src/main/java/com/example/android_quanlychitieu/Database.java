@@ -30,18 +30,19 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create table users
-        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
-                + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_USERNAME + " TEXT NOT NULL, "
-                + COLUMN_PASSWORD + " TEXT NOT NULL)";
+        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
+                COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_USERNAME + " TEXT NOT NULL, " +
+                COLUMN_PASSWORD + " TEXT NOT NULL)";
         db.execSQL(CREATE_USERS_TABLE);
 
         // Create table loaithu
-        String CREATE_LOAITHU_TABLE = "CREATE TABLE " + TABLE_LOAITHU + " ("
-                + COLUMN_LOAITHU_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_LOAITHU_NAME + " TEXT NOT NULL, "
-                + COLUMN_USER_ID_FK + " INTEGER NOT NULL, "
-                + "FOREIGN KEY(" + COLUMN_USER_ID_FK + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "))";
+        String CREATE_LOAITHU_TABLE = "CREATE TABLE " + TABLE_LOAITHU + " (" +
+                COLUMN_LOAITHU_ID + " INTEGER NOT NULL, " +
+                COLUMN_LOAITHU_NAME + " TEXT NOT NULL, " +
+                COLUMN_USER_ID_FK + " INTEGER NOT NULL, " +
+                "FOREIGN KEY(" + COLUMN_USER_ID_FK + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "), " +
+                "PRIMARY KEY(" + COLUMN_LOAITHU_ID + ", " + COLUMN_USER_ID_FK + "))";
         db.execSQL(CREATE_LOAITHU_TABLE);
     }
 
@@ -61,25 +62,47 @@ public class Database extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_USERS, null, values);
         if (result != -1) {
-            // Insert default loaithu entries for new user
             int userId = getLastInsertedId();
             return true;
         }
         return false;
     }
 
-    // Insert default loaithu entries for a user
-
 
     // Insert loaithu
     public boolean insertLoaiThu(String name, int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
+        int newId = getNextLoaiThuId(userId);
         ContentValues values = new ContentValues();
+        values.put(COLUMN_LOAITHU_ID, newId);
         values.put(COLUMN_LOAITHU_NAME, name);
         values.put(COLUMN_USER_ID_FK, userId);
-
         long result = db.insert(TABLE_LOAITHU, null, values);
         return result != -1;
+    }
+
+    public int getNextLoaiThuId(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int nextId = 1; // ID mặc định bắt đầu từ 1
+        Cursor cursor = null;
+        try {
+            String query = "SELECT MAX(" + COLUMN_LOAITHU_ID + ") AS max_id FROM " + TABLE_LOAITHU +
+                    " WHERE " + COLUMN_USER_ID_FK + "=?";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+            if (cursor != null && cursor.moveToFirst()) {
+                int maxId = cursor.getInt(cursor.getColumnIndexOrThrow("max_id"));
+                if (maxId > 0) {
+                    nextId = maxId + 1;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("Database", "Error calculating next ID", e);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return nextId;
     }
 
     // Update loaithu
@@ -87,17 +110,12 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_LOAITHU_NAME, name);
-        values.put(COLUMN_USER_ID_FK, userId);
 
-        // Cập nhật dòng trong bảng loaithu
-        int result = db.update(TABLE_LOAITHU, values, COLUMN_LOAITHU_ID + "=?",
-                new String[]{String.valueOf(loaithuId)});
-
-        Log.d("Database", "Update result: " + result); // Ghi log số dòng bị ảnh hưởng
-        return result > 0; // Trả về true nếu ít nhất 1 dòng được cập nhật
+        int result = db.update(TABLE_LOAITHU, values,
+                COLUMN_LOAITHU_ID + "=? AND " + COLUMN_USER_ID_FK + "=?",
+                new String[]{String.valueOf(loaithuId), String.valueOf(userId)});
+        return result > 0;
     }
-
-
 
     // User login
     public int login(String username, String password) {
@@ -115,7 +133,7 @@ public class Database extends SQLiteOpenHelper {
         return -1;
     }
 
-    // Get last inserted ID
+    // Get last inserted user ID
     private int getLastInsertedId() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT last_insert_rowid()", null);
@@ -124,8 +142,21 @@ public class Database extends SQLiteOpenHelper {
             cursor.close();
             return id;
         }
-        if (cursor != null) cursor.close();
         return -1;
+    }
+
+    public boolean deleteLoaithu(int loaithuId, int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_LOAITHU,
+                COLUMN_LOAITHU_ID + "=? AND " + COLUMN_USER_ID_FK + "=?",
+                new String[]{String.valueOf(loaithuId), String.valueOf(userId)});
+        return result > 0;
+    }
+
+    public Cursor getAllLoaiThu(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_LOAITHU, null, COLUMN_USER_ID_FK + "=?",
+                new String[]{String.valueOf(userId)}, null, null, null);
     }
     public Boolean checkName(String name) {
         SQLiteDatabase MyDatabase = this.getReadableDatabase();
@@ -133,16 +164,5 @@ public class Database extends SQLiteOpenHelper {
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;
-    }
-    public boolean deleteLoaithu(int loaithuId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int result = db.delete(TABLE_LOAITHU, COLUMN_LOAITHU_ID + "=?",
-                new String[]{String.valueOf(loaithuId)});
-        return result > 0;
-    }
-    public Cursor getAllLoaiThu(int userId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_LOAITHU, null, COLUMN_USER_ID_FK + "=?",
-                new String[]{String.valueOf(userId)}, null, null, null);
     }
 }
