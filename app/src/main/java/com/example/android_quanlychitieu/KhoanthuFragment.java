@@ -30,6 +30,7 @@ public class KhoanthuFragment extends Fragment {
     private Database db;
     private List<KhoanThu> khoanthuList;
     private KhoanThuAdapter khoanthuAdapter;
+    //
     private int userId;
 
     public KhoanthuFragment() {
