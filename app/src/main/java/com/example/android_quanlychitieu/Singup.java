@@ -19,6 +19,7 @@ public class Singup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singup);
+
         editName=findViewById(R.id.signup_editname);
         editPass=findViewById(R.id.signup_editpass);
         editPassconfi=findViewById(R.id.signup_editpassconfi);
@@ -33,19 +34,16 @@ public class Singup extends AppCompatActivity {
         editsigup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = editName.getText().toString().trim();
-                String pass = editPass.getText().toString().trim();
+                String username = editName.getText().toString().trim();
+                String password = editPass.getText().toString().trim();
                 String passcofi = editPassconfi.getText().toString().trim();
 
-                if (name.isEmpty() || pass.isEmpty() || passcofi.isEmpty()) {
-                    Toast.makeText(Singup.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!isValidName(name)) {
+
+                if (!isValidName(username)) {
                     Toast.makeText(Singup.this, "Invalid name. Use 6 characters .", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!isValidPassword(pass)) {
+                if (!isValidPassword(password)) {
                     Toast.makeText(Singup.this, "Invalid password. Use 6 characters .", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -53,28 +51,31 @@ public class Singup extends AppCompatActivity {
                     Toast.makeText(Singup.this, "Invalid password. Use 6 characters .", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!pass.equals(passcofi)) {
+                if (!password.equals(passcofi)) {
                     Toast.makeText(Singup.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                if (database.checkName(name)) {
+                if (database.checkName(username)) {
                     Toast.makeText(Singup.this, "User Already Exists", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                boolean isInserted = database.insertData(name, pass);
-                if (isInserted) {
-                    Toast.makeText(Singup.this, "User Signup Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Singup.this, Login.class);
-                 startActivity(intent);
+                if (username.isEmpty() || password.isEmpty()|| passcofi.isEmpty()) {
+                    Toast.makeText(Singup.this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Singup.this, "User Signup Failed", Toast.LENGTH_SHORT).show();
+
+                    boolean isRegistered = database.registerUser(username, password);
+                    if (isRegistered) {
+                        Toast.makeText(Singup.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Singup.this,Login.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(Singup.this, "Đăng ký thất bại!", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
+
             }
         });
-
-
     }
     private boolean isValidPassword(String password) {
         return password.length() >= 6 ;

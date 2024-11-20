@@ -24,6 +24,7 @@ public class tablayout_khoanchi extends AppCompatActivity {
     private TabLayout mtabLayout;
     private ViewPager mviewPage;
     private DrawerLayout drawerLayout;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,9 @@ public class tablayout_khoanchi extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         mtabLayout = findViewById(R.id.tab_layout);
         mviewPage = findViewById(R.id.viewpager);
-        //lấy name từ database
-        String username = getIntent().getStringExtra("name");
 
+        // Nhận user_id từ Intent (được truyền qua từ màn hình đăng ký/đăng nhập)
+        userId = getIntent().getIntExtra("user_id", -1);
 
         ImageView menuIcon = findViewById(R.id.menu_icon);
         menuIcon.setOnClickListener(new View.OnClickListener() {
@@ -50,13 +51,14 @@ public class tablayout_khoanchi extends AppCompatActivity {
         });
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        //gan name vào text để hiện thị
+        // Gán name vào text để hiển thị
         View headerView = navigationView.getHeaderView(0);
         TextView usernameTextView = headerView.findViewById(R.id.username);
+        String username = getIntent().getStringExtra("username");
         if (username == null || username.isEmpty()) {
-            username = "Guest"; // Tên mặc định nếu không đăng nhập
+            username = "admin";
         }
-        usernameTextView.setText(" UserName :"+username);
+        usernameTextView.setText(username);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -66,9 +68,9 @@ public class tablayout_khoanchi extends AppCompatActivity {
                     setupTabLayoutKhoanthu(); // Khi chọn "Khoản Thu"
                 } else if (id == R.id.nav_khoanchi) {
                     setupTabLayoutKhoanchi(); // Khi chọn "Khoản Chi"
-                } else if (id==R.id.nav_thongke) {
-                    setupTabLayoutThongke();
-                } else if (id==R.id.nav_thoat) {
+                } else if (id == R.id.nav_thongke) {
+                    setupTabLayoutThongke(); // Khi chọn "Thông Kê"
+                } else if (id == R.id.nav_thoat) {
                     finish();
                 }
 
@@ -83,8 +85,13 @@ public class tablayout_khoanchi extends AppCompatActivity {
 
     private void setupTabLayoutKhoanchi() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new KhoanchiFragment());    // Khoản Chi
-        fragments.add(new LoaichiFragment());    // Loại Chi
+
+        KhoanchiFragment khoanchiFragment = KhoanchiFragment.newInstance(userId); // Truyền user_id vào khoanthuFragment
+
+        fragments.add(khoanchiFragment); // Khoản Thu
+
+        LoaichiFragment loaichiFragment = LoaichiFragment.newInstance(userId); // Truyền user_id vào LoaithuFragment
+        fragments.add(loaichiFragment); // Loại Thu
 
         List<String> titles = new ArrayList<>();
         titles.add("Khoản Chi");
@@ -95,8 +102,13 @@ public class tablayout_khoanchi extends AppCompatActivity {
 
     private void setupTabLayoutKhoanthu() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new KhoanthuFragment());    // Khoản Thu
-        fragments.add(new LoaithuFragment()); // Loại Thu
+
+        // Truyền userId vào LoaithuFragment
+        KhoanthuFragment khoanthuFragment = KhoanthuFragment.newInstance(userId); // Truyền user_id vào khoanthuFragment
+
+        fragments.add(khoanthuFragment); // Khoản Thu
+        LoaithuFragment loaithuFragment = LoaithuFragment.newInstance(userId); // Truyền user_id vào LoaithuFragment
+        fragments.add(loaithuFragment); // Loại Thu
 
         List<String> titles = new ArrayList<>();
         titles.add("Khoản Thu");
@@ -104,11 +116,16 @@ public class tablayout_khoanchi extends AppCompatActivity {
 
         setupViewPager(fragments, titles);
     }
+
     private void setupTabLayoutThongke() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new ThongkeThuFragment());    // Khoản Chi
-        fragments.add(new ThongkeChiFragment());    // Loại Chi
+        ThongkeThuFragment thongkeThuFragment = ThongkeThuFragment.newInstance(userId);
 
+        fragments.add(thongkeThuFragment); // Khoản Thu
+
+        ThongkeChiFragment thongkeChiFragment = ThongkeChiFragment.newInstance(userId);
+
+        fragments.add(thongkeChiFragment); // Khoản Thu
         List<String> titles = new ArrayList<>();
         titles.add("Thông Kê Thu");
         titles.add("Thống Kê Chi");
@@ -123,6 +140,5 @@ public class tablayout_khoanchi extends AppCompatActivity {
         mviewPage.setAdapter(viewPageAdapter);
         viewPageAdapter.notifyDataSetChanged();
         mtabLayout.setupWithViewPager(mviewPage);
-
     }
 }

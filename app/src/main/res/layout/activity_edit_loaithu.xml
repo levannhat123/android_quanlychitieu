@@ -18,10 +18,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:id="@+id/titleTextView"
             android:paddingBottom="16dp"
-            android:text="THÊM LOẠI CHI"
-            android:textAlignment="center"
+            android:text="UPDATE LOẠI THU"
             android:textColor="#ffffff"
+            android:textColorHighlight="#F41C1C"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -36,9 +37,10 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
-            android:text="Tên Loại Chi"
+            android:text="Tên Loại Thu"
+            android:textAlignment="center"
             android:textColor="#090909"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,17 +49,31 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/etLoaiChi"
+                android:id="@+id/etLoaiThu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
                 android:ems="10"
-                android:hint="Nhập Loại Chi"
+                android:hint="Nhập Loại Thu"
                 android:inputType="text"
                 android:textColor="#090909"
                 android:textColorHint="#090909" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSaveLoathu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"
+            android:text="Cập Nhật Loại Thu" />
+
+        <Button
+            android:id="@+id/btnCancelLoathu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hủy" />
 
 
     </LinearLayout>

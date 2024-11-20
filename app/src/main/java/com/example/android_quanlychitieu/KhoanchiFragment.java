@@ -1,15 +1,19 @@
 package com.example.android_quanlychitieu;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,96 +27,113 @@ import java.util.List;
  */
 public class KhoanchiFragment extends Fragment {
     private FloatingActionButton fab;
+    private Database db;
+    private List<KhoanChi> khoanchiList;
+    private KhoanchiAdapter khoanthuAdapter;
+    private int userId;
 
     public KhoanchiFragment() {
         // Required empty public constructor
     }
 
-
-
+    public static KhoanchiFragment newInstance(int userId) {
+        KhoanchiFragment fragment = new KhoanchiFragment();
+        Bundle args = new Bundle();
+        args.putInt("user_id", userId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userId = getArguments().getInt("user_id", -1);
+        }
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (khoanthuAdapter != null) {
+            loadLoaithu(userId);
+        }
+    }
 
-        View view= inflater.inflate(R.layout.fragment_khoanchi, container, false);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_khoanchi, container, false);
 
-        fab = view.findViewById(R.id.fab_home);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hiển thị hộp thoại thêm mới khi nhấn vào FAB
-                showAddDialog();
+        // Khởi tạo Database
+        db = new Database(requireContext());
+        if (getArguments() != null) {
+            userId = getArguments().getInt("user_id", -1);
+        }
+        Log.d("TAG", "user_id in khoanthuFragment: " + userId);
+        // Kiểm tra user_id
+        if (userId == -1) {
+            Toast.makeText(getContext(), "Lỗi: Không có user_id", Toast.LENGTH_SHORT).show();
+            return view;
+        }
+        ListView listView = view.findViewById(R.id.listViewKhoanThu);
+        khoanchiList = new ArrayList<>();
+        khoanthuAdapter = new KhoanchiAdapter(requireContext(), khoanchiList, db, userId);
+
+        listView.setAdapter(khoanthuAdapter);
+
+        loadLoaithu(userId);
+
+        fab = view.findViewById(R.id.fab_khoanchi);
+        fab.setOnClickListener(v -> {
+            if (userId == -1) {
+                Toast.makeText(getContext(), "Lỗi: Không xác định được người dùng", Toast.LENGTH_SHORT).show();
+                return;
             }
+            Intent intent = new Intent(getContext(), AddKhoanChi.class);
+            intent.putExtra("user_id", userId);
+            ((Activity) getContext()).startActivityForResult(intent, 1);
         });
 
         return view;
     }
-    private void showAddDialog() {
-        // Tạo AlertDialog.Builder với context từ Fragment
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-
-        // Inflate layout tùy chỉnh cho Dialog
-        View dialogView = inflater.inflate(R.layout.custom_dialog_khoanchi, null);
-        builder.setView(dialogView);
-
-        // Tìm các thành phần trong layout tùy chỉnh
-        EditText etTenKhoanThu = dialogView.findViewById(R.id.etTenKhoanChi);
-        EditText etNgayThu = dialogView.findViewById(R.id.etNgayChi);
-        EditText etTien = dialogView.findViewById(R.id.etTien_chi);
-        EditText etHoTen = dialogView.findViewById(R.id.etHoTenChi);
-        EditText etGhiChu = dialogView.findViewById(R.id.etGhiChu_chi);
-        // Inside your Fragment or Activity
-        Spinner spLoaiThu = dialogView.findViewById(R.id.spLoaiThu);
-
-// Dữ liệu cho Spinner
-        List<String> loaiThuList = new ArrayList<>();
-        loaiThuList.add("Loại 1");
-        loaiThuList.add("Loại 2");
-        loaiThuList.add("Loại 3");
 
 
-        // Inside your fragment
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getContext(), // context (can also use getActivity() or requireContext())
-                android.R.layout.simple_spinner_item, // layout for the spinner items
-                loaiThuList // data list
-        );
 
+    private void loadLoaithu(int userId) {
+        Log.d("loaiThu", "Loading khoan thu for userId: " + userId);
+        SQLiteDatabase dbsqlt = this.db.getReadableDatabase();
+        Cursor cursor = null;
 
-// Thiết lập layout dropdown cho Spinner
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spLoaiThu.setAdapter(adapter);
+        try {
+            String query = "SELECT * FROM " + Database.TABLE_KHOANCHI +
+                    " WHERE " + Database.COLUMN_USER_ID_FK + " = ?";
+            cursor = dbsqlt.rawQuery(query, new String[]{String.valueOf(userId)});
 
+            khoanchiList.clear();
 
-        // Thiết lập các nút cho Dialog
-        builder.setPositiveButton("THÊM MỚI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Lấy dữ liệu từ các trường và xử lý logic
-                String tenKhoanThu = etTenKhoanThu.getText().toString().trim();
-                String ngayThu = etNgayThu.getText().toString().trim();
-                String tien = etTien.getText().toString().trim();
-                String hoTen = etHoTen.getText().toString().trim();
-                String ghiChu = etGhiChu.getText().toString().trim();
-
-                // Xử lý logic thêm mới
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_KHOANCHI_ID));
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_KHOANCHI_NAME));
+                    String ngaythu = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_NGAYCHI));
+                    int tien = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_TIENCHI));
+                    String ghichu = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_GHICHUCHI));
+                    int loathu = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_LOAICHI_ID_FK));
+                    int userIdFromDb = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_USER_ID_FK));
+                    khoanchiList.add(new KhoanChi(id,name,ngaythu,tien,ghichu,loathu,userIdFromDb));
+                } while (cursor.moveToNext());
             }
-        });
+        } catch (Exception e) {
+            Log.e("KhoanthuFragment", "Error loading Loaithu", e);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
 
-
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        // Hiển thị AlertDialog
-        builder.create().show();
+        if (khoanthuAdapter != null) {
+            khoanthuAdapter.notifyDataSetChanged();
+        }
     }
 }

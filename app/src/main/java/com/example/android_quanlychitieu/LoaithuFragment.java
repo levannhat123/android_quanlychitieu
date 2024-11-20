@@ -1,51 +1,38 @@
 package com.example.android_quanlychitieu;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoaithuFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoaithuFragment extends Fragment {
     private FloatingActionButton fab;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Database db;
+    private List<LoaiThu> loaithuList;
+    private LoaiThuAdapter loaithuAdapter;
+    private int userId;
 
     public LoaithuFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoaithuFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoaithuFragment newInstance(String param1, String param2) {
+    public static LoaithuFragment newInstance(int userId) {
         LoaithuFragment fragment = new LoaithuFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt("user_id", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,66 +41,89 @@ public class LoaithuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userId = getArguments().getInt("user_id", -1);
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (loaithuAdapter != null) {
+            loadLoaithu(userId);
+            loaithuAdapter.notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_loaithu, container, false);
+        View view = inflater.inflate(R.layout.fragment_loaithu, container, false);
+
+        db = new Database(requireContext());
+
+        if (getArguments() != null) {
+            userId = getArguments().getInt("user_id", -1);
+        }
+
+        Log.d("TAG", "user_id in LoaithuFragment: " + userId);
+
+        if (userId == -1) {
+            Toast.makeText(getContext(), "Lỗi: Không có user_id", Toast.LENGTH_SHORT).show();
+            return view;
+        }
+
+        ListView listView = view.findViewById(R.id.listViewLoaiThu);
+        loaithuList = new ArrayList<>();
+        loaithuAdapter = new LoaiThuAdapter(requireContext(), loaithuList);
+        listView.setAdapter(loaithuAdapter);
+
+        loadLoaithu(userId);
 
         fab = view.findViewById(R.id.fab_page);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hiển thị hộp thoại thêm mới khi nhấn vào FAB
-                showAddDialog();
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), AddLoaiThu.class);
+            intent.putExtra("user_id", userId);
+            ((Activity) getContext()).startActivityForResult(intent, 1);
         });
+
+
 
         return view;
     }
-    private void showAddDialog() {
-
-        //nhật
-        // Tạo AlertDialog.Builder với context từ Fragment
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-
-        // Inflate layout tùy chỉnh cho Dialog
-        View dialogView = inflater.inflate(R.layout.custom_dialog_loaithu, null);
-        builder.setView(dialogView);
-
-        // Tìm các thành phần trong layout tùy chỉnh
-        EditText etLoaiThu = dialogView.findViewById(R.id.etLoaiThu);
 
 
 
+    public void loadLoaithu(int userId) {
+        Log.d("loaiThu", "Loading loai thu for userId: " + userId);
+        SQLiteDatabase dbsqlt = this.db.getReadableDatabase();
+        Cursor cursor = null;
 
+        try {
+            String query = "SELECT * FROM " + Database.TABLE_LOAITHU +
+                    " WHERE " + Database.COLUMN_USER_ID_FK + " = ?";
+            cursor = dbsqlt.rawQuery(query, new String[]{String.valueOf(userId)});
 
+            loaithuList.clear();
 
-        // Thiết lập các nút cho Dialog
-        builder.setPositiveButton("THÊM MỚI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Lấy dữ liệu từ các trường và xử lý logic
-                String loaiThu= etLoaiThu.getText().toString().trim();
-
-
-                // Xử lý logic thêm mới
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndex(Database.COLUMN_LOAITHU_ID));
+                    String name = cursor.getString(cursor.getColumnIndex(Database.COLUMN_LOAITHU_NAME));
+                    int userIdFromDb = cursor.getInt(cursor.getColumnIndex(Database.COLUMN_USER_ID_FK));
+                    loaithuList.add(new LoaiThu(id, name, userIdFromDb));
+                } while (cursor.moveToNext());
             }
-        });
+        } catch (Exception e) {
+            Log.e("LoaithuFragment", "Error loading Loaithu", e);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
 
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        // Hiển thị AlertDialog
-        builder.create().show();
+        if (loaithuAdapter != null) {
+            loaithuAdapter.notifyDataSetChanged();
+        }
     }
+
+
+
 }
