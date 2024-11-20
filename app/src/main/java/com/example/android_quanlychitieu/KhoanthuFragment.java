@@ -52,7 +52,7 @@ public class KhoanthuFragment extends Fragment {
         }
 
     }
-//m
+
     @Override
     public void onResume() {
         super.onResume();
