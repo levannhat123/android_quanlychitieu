@@ -53,6 +53,10 @@ public class ThongkeChiFragment extends Fragment {
 
         edtStartDate.setOnClickListener(v -> showDatePickerDialog(edtStartDate));
 
+
+
+
+
         edtEndDate.setOnClickListener(v -> showDatePickerDialog(edtEndDate));
 
         // Khởi tạo database
