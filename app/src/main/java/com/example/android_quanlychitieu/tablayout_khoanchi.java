@@ -85,8 +85,13 @@ public class tablayout_khoanchi extends AppCompatActivity {
 
     private void setupTabLayoutKhoanchi() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new KhoanchiFragment()); // Khoản Chi
-        fragments.add(new LoaichiFragment());  // Loại Chi
+
+        KhoanchiFragment khoanchiFragment = KhoanchiFragment.newInstance(userId); // Truyền user_id vào khoanthuFragment
+
+        fragments.add(khoanchiFragment); // Khoản Thu
+
+        LoaichiFragment loaichiFragment = LoaichiFragment.newInstance(userId); // Truyền user_id vào LoaithuFragment
+        fragments.add(loaichiFragment); // Loại Thu
 
         List<String> titles = new ArrayList<>();
         titles.add("Khoản Chi");
@@ -99,7 +104,9 @@ public class tablayout_khoanchi extends AppCompatActivity {
         List<Fragment> fragments = new ArrayList<>();
 
         // Truyền userId vào LoaithuFragment
-        fragments.add(new KhoanthuFragment()); // Khoản Thu
+        KhoanthuFragment khoanthuFragment = KhoanthuFragment.newInstance(userId); // Truyền user_id vào khoanthuFragment
+
+        fragments.add(khoanthuFragment); // Khoản Thu
         LoaithuFragment loaithuFragment = LoaithuFragment.newInstance(userId); // Truyền user_id vào LoaithuFragment
         fragments.add(loaithuFragment); // Loại Thu
 
@@ -112,9 +119,13 @@ public class tablayout_khoanchi extends AppCompatActivity {
 
     private void setupTabLayoutThongke() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new ThongkeThuFragment()); // Thống Kê Thu
-        fragments.add(new ThongkeChiFragment()); // Thống Kê Chi
+        ThongkeThuFragment thongkeThuFragment = ThongkeThuFragment.newInstance(userId);
 
+        fragments.add(thongkeThuFragment); // Khoản Thu
+
+        ThongkeChiFragment thongkeChiFragment = ThongkeChiFragment.newInstance(userId);
+
+        fragments.add(thongkeChiFragment); // Khoản Thu
         List<String> titles = new ArrayList<>();
         titles.add("Thông Kê Thu");
         titles.add("Thống Kê Chi");

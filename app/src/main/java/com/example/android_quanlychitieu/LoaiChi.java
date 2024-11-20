@@ -1,11 +1,11 @@
 package com.example.android_quanlychitieu;
 
-public class LoaiThu {
+public class LoaiChi {
     private int id;
     private String name;
     private int userId;
     // Constructor
-    public LoaiThu(int id, String name, int userIdFromDb) {
+    public LoaiChi(int id, String name, int userIdFromDb) {
         this.id = id;
         this.name = name;
         this.userId = userIdFromDb;

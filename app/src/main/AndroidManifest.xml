@@ -16,6 +16,21 @@
         android:theme="@style/Theme.Android_quanLyChiTieu"
         tools:targetApi="31">
         <activity
+            android:name=".EditKhoanChi"
+            android:exported="false" />
+        <activity
+            android:name=".AddKhoanChi"
+            android:exported="false" />
+        <activity
+            android:name=".AddLoaiChi"
+            android:exported="false" />
+        <activity
+            android:name=".EditKhoanthu"
+            android:exported="false" />
+        <activity
+            android:name=".AddKhoanThu"
+            android:exported="false" />
+        <activity
             android:name=".EditLoaithu"
             android:exported="false" />
         <activity

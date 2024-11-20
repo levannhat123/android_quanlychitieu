@@ -1,46 +1,32 @@
 package com.example.android_quanlychitieu;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ThongkeThuFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.Calendar;
+import java.util.List;
+
 public class ThongkeThuFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int userId;
 
     public ThongkeThuFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThongkeThuFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ThongkeThuFragment newInstance(String param1, String param2) {
+    public static ThongkeThuFragment newInstance(int userId) {
         ThongkeThuFragment fragment = new ThongkeThuFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt("user_id", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,15 +35,66 @@ public class ThongkeThuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userId = getArguments().getInt("user_id", -1);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_thongke_thu, container, false);
+        View view = inflater.inflate(R.layout.fragment_thongke_thu, container, false);
+
+        EditText edtStartDate = view.findViewById(R.id.edtStartDate);
+        EditText edtEndDate = view.findViewById(R.id.edtEndDate);
+        Button btnSearch = view.findViewById(R.id.btnSearch);
+        ListView listViewKhoanThu = view.findViewById(R.id.listViewKhoanThu);
+        TextView textViewTongTien = view.findViewById(R.id.textViewTongTien);
+        TextView textViewCount = view.findViewById(R.id.textViewcount);
+
+        edtStartDate.setOnClickListener(v -> showDatePickerDialog(edtStartDate));
+
+        edtEndDate.setOnClickListener(v -> showDatePickerDialog(edtEndDate));
+
+        Database db = new Database(getContext());
+       int userId = getArguments().getInt("user_id", -1);
+
+        btnSearch.setOnClickListener(v -> {
+            String startDate = edtStartDate.getText().toString();
+            String endDate = edtEndDate.getText().toString();
+
+            List<KhoanThu> khoanThuList = db.getKhoanThuTheoNgay(startDate, endDate, userId);
+            int count = db.countKhoanThuTheoNgay(startDate, endDate, userId);
+
+            KhoanThuListAdapter adapter = new KhoanThuListAdapter(getContext(), khoanThuList);
+            listViewKhoanThu.setAdapter(adapter);
+
+            double tongTien = 0;
+            for (KhoanThu kt : khoanThuList) {
+                tongTien += kt.getSoTien();
+            }
+            textViewTongTien.setText(String.format("Tổng tiền: %.2f$", tongTien));
+            textViewCount.setText(String.format("Số lượng: %d", count));
+
+        });
+
+        return view;
+    }
+
+    private void showDatePickerDialog(EditText editText) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String formattedDate = String.format("%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
+                    editText.setText(formattedDate);
+                },
+                year, month, day
+        );
+
+        datePickerDialog.show();
     }
 }

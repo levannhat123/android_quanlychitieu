@@ -94,6 +94,7 @@ public class LoaithuFragment extends Fragment {
 
 
     public void loadLoaithu(int userId) {
+        Log.d("loaiThu", "Loading loai thu for userId: " + userId);
         SQLiteDatabase dbsqlt = this.db.getReadableDatabase();
         Cursor cursor = null;
 

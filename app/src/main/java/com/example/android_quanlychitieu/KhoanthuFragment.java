@@ -1,13 +1,19 @@
 package com.example.android_quanlychitieu;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,132 +23,117 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link KhoanthuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class KhoanthuFragment extends Fragment {
     private FloatingActionButton fab;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Database db;
+    private List<KhoanThu> khoanthuList;
+    private KhoanThuAdapter khoanthuAdapter;
+    private int userId;
 
     public KhoanthuFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment KhoanthuFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static KhoanthuFragment newInstance(String param1, String param2) {
+    public static KhoanthuFragment newInstance(int userId) {
         KhoanthuFragment fragment = new KhoanthuFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt("user_id", userId);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userId = getArguments().getInt("user_id", -1);
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (khoanthuAdapter != null) {
+            loadLoaithu(userId);
         }
     }
 
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_khoanthu, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_khoanthu, container, false);
 
-        fab = view.findViewById(R.id.fab_home);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hiển thị hộp thoại thêm mới khi nhấn vào FAB
-                showAddDialog();
+        // Khởi tạo Database
+        db = new Database(requireContext());
+        if (getArguments() != null) {
+            userId = getArguments().getInt("user_id", -1);
+        }
+        Log.d("TAG", "user_id in khoanthuFragment: " + userId);
+        // Kiểm tra user_id
+        if (userId == -1) {
+            Toast.makeText(getContext(), "Lỗi: Không có user_id", Toast.LENGTH_SHORT).show();
+            return view;
+        }
+        ListView listView = view.findViewById(R.id.listViewKhoanThu);
+        khoanthuList = new ArrayList<>();
+        khoanthuAdapter = new KhoanThuAdapter(requireContext(), khoanthuList, db, userId);
+
+        listView.setAdapter(khoanthuAdapter);
+
+        loadLoaithu(userId);
+
+        fab = view.findViewById(R.id.fab_khoanthu);
+        fab.setOnClickListener(v -> {
+            if (userId == -1) {
+                Toast.makeText(getContext(), "Lỗi: Không xác định được người dùng", Toast.LENGTH_SHORT).show();
+                return;
             }
+            Intent intent = new Intent(getContext(), AddKhoanThu.class);
+            intent.putExtra("user_id", userId);
+            ((Activity) getContext()).startActivityForResult(intent, 1);
         });
 
         return view;
-
-
     }
-    private void showAddDialog() {
-        // Tạo AlertDialog.Builder với context từ Fragment
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-
-        // Inflate layout tùy chỉnh cho Dialog
-//        View dialogView = inflater.inflate(R.layout.custom_dialog, null);
-//        builder.setView(dialogView);
-//
-//        // Tìm các thành phần trong layout tùy chỉnh
-//        EditText etTenKhoanThu = dialogView.findViewById(R.id.etTenKhoanThu);
-//        EditText etNgayThu = dialogView.findViewById(R.id.etNgayThu);
-//        EditText etTien = dialogView.findViewById(R.id.etTien);
-//        EditText etHoTen = dialogView.findViewById(R.id.etHoTen);
-//        EditText etGhiChu = dialogView.findViewById(R.id.etGhiChu);
-        // Inside your Fragment or Activity
-//        Spinner spLoaiThu = dialogView.findViewById(R.id.spLoaiThu);
-
-// Dữ liệu cho Spinner
-        List<String> loaiThuList = new ArrayList<>();
-        loaiThuList.add("Loại 1");
-        loaiThuList.add("Loại 2");
-        loaiThuList.add("Loại 3");
 
 
-        // Inside your fragment
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getContext(), // context (can also use getActivity() or requireContext())
-                android.R.layout.simple_spinner_item, // layout for the spinner items
-                loaiThuList // data list
-        );
 
+    private void loadLoaithu(int userId) {
+        Log.d("loaiThu", "Loading khoan thu for userId: " + userId);
+        SQLiteDatabase dbsqlt = this.db.getReadableDatabase();
+        Cursor cursor = null;
 
-// Thiết lập layout dropdown cho Spinner
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spLoaiThu.setAdapter(adapter);
+        try {
+            String query = "SELECT * FROM " + Database.TABLE_KHOANTHU +
+                    " WHERE " + Database.COLUMN_USER_ID_FK + " = ?";
+            cursor = dbsqlt.rawQuery(query, new String[]{String.valueOf(userId)});
 
+            khoanthuList.clear();
 
-        // Thiết lập các nút cho Dialog
-//        builder.setPositiveButton("THÊM MỚI", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // Lấy dữ liệu từ các trường và xử lý logic
-//                String tenKhoanThu = etTenKhoanThu.getText().toString().trim();
-//                String ngayThu = etNgayThu.getText().toString().trim();
-//                String tien = etTien.getText().toString().trim();
-//                String hoTen = etHoTen.getText().toString().trim();
-//                String ghiChu = etGhiChu.getText().toString().trim();
-//
-//                // Xử lý logic thêm mới
-//            }
-//        });
-
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_KHOANTHU_ID));
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_KHOANTHU_NAME));
+                    String ngaythu = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_NGAYTHU));
+                    int tien = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_TIEN));
+                    String ghichu = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_GHICHU));
+                    int loathu = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_LOAITHU_ID_FK));
+                    int userIdFromDb = cursor.getInt(cursor.getColumnIndexOrThrow(Database.COLUMN_USER_ID_FK));
+                    khoanthuList.add(new KhoanThu(id,name,ngaythu,tien,ghichu,loathu,userIdFromDb));
+                } while (cursor.moveToNext());
             }
-        });
+        } catch (Exception e) {
+            Log.e("KhoanthuFragment", "Error loading Loaithu", e);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
 
-        // Hiển thị AlertDialog
-        builder.create().show();
+        if (khoanthuAdapter != null) {
+            khoanthuAdapter.notifyDataSetChanged();
+        }
     }
 }

@@ -20,7 +20,7 @@
             android:gravity="center"
             android:id="@+id/titleTextView"
             android:paddingBottom="16dp"
-            android:text="THÊM LOẠI THU"
+            android:text="THÊM LOẠI CHI"
             android:textColor="#ffffff"
             android:textColorHighlight="#F41C1C"
             android:textSize="24sp"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:paddingBottom="4dp"
-            android:text="Tên Loại Thu"
+            android:text="Tên Loại Chi"
             android:textAlignment="center"
             android:textColor="#090909"
             android:textSize="16sp" />
@@ -49,27 +49,27 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/etLoaiThu"
+                android:id="@+id/etLoaiChi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
                 android:ems="10"
-                android:hint="Nhập Loại Thu"
+                android:hint="Nhập Loại Chi"
                 android:inputType="text"
                 android:textColor="#090909"
                 android:textColorHint="#090909" />
         </LinearLayout>
         <Button
-            android:id="@+id/btnSaveLoaithu"
+            android:id="@+id/btnSaveLoaiChi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10sp"
             android:layout_marginTop="10sp"
-            android:text="Thêm Loại Thu" />
+            android:text="Thêm Loại Chi" />
 
         <Button
-            android:id="@+id/btnCancelLoathu"
+            android:id="@+id/btnCancelLoaichi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hủy" />
