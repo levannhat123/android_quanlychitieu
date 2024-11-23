@@ -55,7 +55,7 @@ public class LoaiChiAdapter extends ArrayAdapter<LoaiChi> {
                         .setPositiveButton("Xóa", (dialog, which) -> {
 
                             Database db = new Database(getContext());
-                            boolean isDeleted = db.deleteLoaithu(loaiChi.getId(), loaiChi.getUserId());
+                            boolean isDeleted = db.deleteLoaiChi(loaiChi.getId(), loaiChi.getUserId());
                             if (isDeleted) {
                                 Toast.makeText(getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
                                 remove(loaiChi);
