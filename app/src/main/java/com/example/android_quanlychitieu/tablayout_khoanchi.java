@@ -1,5 +1,6 @@
 package com.example.android_quanlychitieu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,7 +72,10 @@ public class tablayout_khoanchi extends AppCompatActivity {
                 } else if (id == R.id.nav_thongke) {
                     setupTabLayoutThongke(); // Khi chọn "Thông Kê"
                 } else if (id == R.id.nav_thoat) {
-                    finish();
+                    Intent intent = new Intent(tablayout_khoanchi.this, Login.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish(); // Kết thúc activity hiện tại
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
