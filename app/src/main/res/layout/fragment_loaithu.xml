@@ -15,14 +15,6 @@
         android:dividerHeight="16dp"
         android:padding="8dp" />
 
-
-
-
-
-
-
-
-
     <!-- FloatingActionButton -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_page"
