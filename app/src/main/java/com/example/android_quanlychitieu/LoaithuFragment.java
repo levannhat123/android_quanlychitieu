@@ -73,6 +73,10 @@ public class LoaithuFragment extends Fragment {
         }
 
         ListView listView = view.findViewById(R.id.listViewLoaiThu);
+
+
+        ///duc dduc
+
         loaithuList = new ArrayList<>();
         loaithuAdapter = new LoaiThuAdapter(requireContext(), loaithuList);
         listView.setAdapter(loaithuAdapter);
