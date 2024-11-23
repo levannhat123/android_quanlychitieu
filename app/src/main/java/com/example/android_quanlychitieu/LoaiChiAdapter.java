@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +28,13 @@ public class LoaiChiAdapter extends ArrayAdapter<LoaiChi> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_loaithu, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_loaichi, parent, false);
         }
 
         LoaiChi loaiChi = getItem(position);
 
-        TextView tvLoaiThuId = convertView.findViewById(R.id.tvLoaiThuId);
-        TextView tvLoaiThuName = convertView.findViewById(R.id.tvLoaiThuName);
+        TextView tvLoaiThuId = convertView.findViewById(R.id.tvLoaiChiId);
+        TextView tvLoaiThuName = convertView.findViewById(R.id.tvLoaiChiName);
         ImageButton btnEdit = convertView.findViewById(R.id.btn_edit);
         ImageButton btnDelete = convertView.findViewById(R.id.btn_delete);
 
@@ -42,10 +43,12 @@ public class LoaiChiAdapter extends ArrayAdapter<LoaiChi> {
             tvLoaiThuName.setText(loaiChi.getName());
 
             btnEdit.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), EditLoaithu.class);
+                Intent intent = new Intent(getContext(), EditLoaiChi.class);
                 intent.putExtra("user_id", loaiChi.getUserId());
-                intent.putExtra("loaithu_id", loaiChi.getId());
-                intent.putExtra("loaithu_name", loaiChi.getName());
+                intent.putExtra("loaichi_id", loaiChi.getId());
+                intent.putExtra("loaichi_name", loaiChi.getName());
+                Log.d("IntentDataNhat", "user_id: " + loaiChi.getUserId() + ", loaichi_id: " + loaiChi.getId() + ", loaichi_name: " + loaiChi.getName());
+
                 ((Activity) getContext()).startActivityForResult(intent, 1);
             });
             btnDelete.setOnClickListener(v -> {

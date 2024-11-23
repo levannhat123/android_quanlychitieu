@@ -16,7 +16,7 @@
 
         <!-- Hiển thị ID -->
         <TextView
-            android:id="@+id/tvLoaiThuId"
+            android:id="@+id/tvLoaiChiId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="30sp"
@@ -26,7 +26,7 @@
 
         <!-- Hiển thị Tên -->
         <TextView
-            android:id="@+id/tvLoaiThuName"
+            android:id="@+id/tvLoaiChiName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tên loại chi"

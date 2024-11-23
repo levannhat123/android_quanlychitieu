@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android_quanLyChiTieu</string>
+    <string name="app_name">Quản lý chi tiêu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Home</string>
     <string name="hello_nhat">page</string>
