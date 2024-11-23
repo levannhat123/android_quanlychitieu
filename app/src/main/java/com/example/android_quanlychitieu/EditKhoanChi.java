@@ -82,7 +82,7 @@ public class EditKhoanChi extends AppCompatActivity {
             loaiThuList = database.getAllLoaiChiWithIds(userId);
 
             if (loaiThuList == null || loaiThuList.isEmpty()) {
-                Toast.makeText(this, "Chưa có loại thu nào, hãy thêm loại thu trước!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Chưa có loại chi nào, hãy thêm loại chi trước!", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
@@ -95,8 +95,8 @@ public class EditKhoanChi extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spLoaiThu.setAdapter(adapter);
         } catch (Exception e) {
-            Log.e("EditKhoanThu", "Error loading loaithu: " + e.getMessage(), e);
-            Toast.makeText(this, "Lỗi khi tải danh sách loại thu!", Toast.LENGTH_SHORT).show();
+            Log.e("EditKhoanChi", "Error loading loaichi: " + e.getMessage(), e);
+            Toast.makeText(this, "Lỗi khi tải danh sách loại chi!", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -104,7 +104,7 @@ public class EditKhoanChi extends AppCompatActivity {
     private void loadKhoanThuData() {
         KhoanChi khoanThu = database.getKhoanChi(khoanThuId, userId);
         if (khoanThu == null) {
-            Toast.makeText(this, "Không tìm thấy dữ liệu khoản thu!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không tìm thấy dữ liệu khoản chi!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -125,14 +125,14 @@ public class EditKhoanChi extends AppCompatActivity {
 
     private void saveKhoanThu() {
         if (loaiThuList == null || loaiThuList.isEmpty()) {
-            Toast.makeText(this, "Chưa có loại thu nào, vui lòng thêm loại thu trước!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chưa có loại chi nào, vui lòng thêm loại chi trước!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         LoaiChi selectedLoaiThu = (LoaiChi) spLoaiThu.getSelectedItem();
         if (selectedLoaiThu == null) {
-            Toast.makeText(this, "Vui lòng chọn loại thu!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn loại chi!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -144,7 +144,7 @@ public class EditKhoanChi extends AppCompatActivity {
 
         // Validate các trường input
         if (TextUtils.isEmpty(name)) {
-            edtName.setError("Vui lòng nhập tên khoản thu");
+            edtName.setError("Vui lòng nhập tên khoản chi");
             return;
         }
 
@@ -155,14 +155,14 @@ public class EditKhoanChi extends AppCompatActivity {
 
         try {
             if (database.updateKhoanChi(khoanThuId, name, ngaythu, tien, ghichu, loaiThuId, userId)) {
-                Toast.makeText(this, "Cập nhật khoản thu thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cập nhật khoản chi thành công!", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK);
                 finish();
             } else {
-                Toast.makeText(this, "Cập nhật khoản thu thất bại!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cập nhật khoản chi thất bại!", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Log.e("EditKhoanThu", "Error updating khoan thu: " + e.getMessage());
+            Log.e("EditKhoanChi", "Error updating khoan chi: " + e.getMessage());
             Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }

@@ -57,7 +57,7 @@ public class KhoanchiFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (khoanthuAdapter != null) {
-            loadLoaithu(userId);
+            loadLoaichi(userId);
         }
     }
 
@@ -72,7 +72,7 @@ public class KhoanchiFragment extends Fragment {
         if (getArguments() != null) {
             userId = getArguments().getInt("user_id", -1);
         }
-        Log.d("TAG", "user_id in khoanthuFragment: " + userId);
+        Log.d("TAG", "user_id in khoanchiFragment: " + userId);
         // Kiểm tra user_id
         if (userId == -1) {
             Toast.makeText(getContext(), "Lỗi: Không có user_id", Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class KhoanchiFragment extends Fragment {
 
         listView.setAdapter(khoanthuAdapter);
 
-        loadLoaithu(userId);
+        loadLoaichi(userId);
 
         fab = view.findViewById(R.id.fab_khoanchi);
         fab.setOnClickListener(v -> {
@@ -102,8 +102,8 @@ public class KhoanchiFragment extends Fragment {
 
 
 
-    private void loadLoaithu(int userId) {
-        Log.d("loaiThu", "Loading khoan thu for userId: " + userId);
+    private void loadLoaichi(int userId) {
+        Log.d("loaichi", "Loading khoan chi for userId: " + userId);
         SQLiteDatabase dbsqlt = this.db.getReadableDatabase();
         Cursor cursor = null;
 
@@ -127,7 +127,7 @@ public class KhoanchiFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
-            Log.e("KhoanthuFragment", "Error loading Loaithu", e);
+            Log.e("KhoanchiFragment", "Error loading Loaichi", e);
         } finally {
             if (cursor != null) cursor.close();
         }

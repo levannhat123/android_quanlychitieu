@@ -70,7 +70,7 @@ public class ThongkeChiFragment extends Fragment {
             List<KhoanChi> khoanThuList = db.getKhoanChiTheoNgay(startDate, endDate, userId);
             int count = db.countKhoanChiTheoNgay(startDate, endDate, userId);
 
-            KhoanchiListAdapter adapter = new KhoanchiListAdapter(getContext(), khoanThuList);
+            KhoanchiThongkeAdapter adapter = new KhoanchiThongkeAdapter(getContext(), khoanThuList);
             listViewKhoanThu.setAdapter(adapter);
 
             double tongTien = 0;

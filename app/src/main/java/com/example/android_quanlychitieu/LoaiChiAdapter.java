@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,14 +46,13 @@ public class LoaiChiAdapter extends ArrayAdapter<LoaiChi> {
                 intent.putExtra("user_id", loaiChi.getUserId());
                 intent.putExtra("loaichi_id", loaiChi.getId());
                 intent.putExtra("loaichi_name", loaiChi.getName());
-                Log.d("IntentDataNhat", "user_id: " + loaiChi.getUserId() + ", loaichi_id: " + loaiChi.getId() + ", loaichi_name: " + loaiChi.getName());
 
                 ((Activity) getContext()).startActivityForResult(intent, 1);
             });
             btnDelete.setOnClickListener(v -> {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Xác nhận xóa")
-                        .setMessage("Bạn có chắc chắn muốn xóa loại thu này?")
+                        .setMessage("Bạn có chắc chắn muốn xóa loại chi này?")
                         .setPositiveButton("Xóa", (dialog, which) -> {
 
                             Database db = new Database(getContext());

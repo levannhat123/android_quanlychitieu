@@ -14,10 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class AddKhoanChi extends AppCompatActivity {
     private Database database;
@@ -25,8 +23,6 @@ public class AddKhoanChi extends AppCompatActivity {
     private Spinner spLoaiThu;
     private Button btnSave, btnCancel;
     private int userId;
-    private Calendar calendar;
-    private SimpleDateFormat dateFormatter;
     private List<LoaiChi> loaiThuList;
 
 
@@ -36,8 +32,7 @@ public class AddKhoanChi extends AppCompatActivity {
         setContentView(R.layout.activity_add_khoan_chi);
 
         database = new Database(this);
-        calendar = Calendar.getInstance();
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
 
         edtName = findViewById(R.id.etTenKhoanChi);
         edtNgayThu = findViewById(R.id.etNgayChi);
@@ -50,7 +45,7 @@ public class AddKhoanChi extends AppCompatActivity {
 
         userId = getIntent().getIntExtra("user_id", -1);
         if (userId == -1) {
-            Toast.makeText(this, "User khoanthu ID không hợp lệ!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "User khoanchi ID không hợp lệ!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -71,7 +66,7 @@ public class AddKhoanChi extends AppCompatActivity {
 
             loaiThuList = database.getAllLoaiChiWithIds(userId);
             if (loaiThuList == null || loaiThuList.isEmpty()) {
-                Toast.makeText(this, "Chưa có loại thu nào, hãy thêm loại thu trước!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Chưa có loại chi nào, hãy thêm loại chi trước!", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
@@ -87,8 +82,8 @@ public class AddKhoanChi extends AppCompatActivity {
             spLoaiThu.setAdapter(adapter);
 
         } catch (Exception e) {
-            Log.e("AddKhoanThu", "Error loading loaithu: " + e.getMessage(), e);
-            Toast.makeText(this, "Lỗi khi tải danh sách loại thu!", Toast.LENGTH_SHORT).show();
+            Log.e("AddKhoanchi", "Error loading loaichi: " + e.getMessage(), e);
+            Toast.makeText(this, "Lỗi khi tải danh sách loại chi!", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -112,14 +107,14 @@ public class AddKhoanChi extends AppCompatActivity {
     }
     private void saveKhoanThu() {
         if (loaiThuList == null || loaiThuList.isEmpty()) {
-            Toast.makeText(this, "Chưa có loại thu nào, vui lòng thêm loại thu trước!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chưa có loại chi nào, vui lòng thêm loại chi trước!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         LoaiChi selectedLoaiThu = (LoaiChi) spLoaiThu.getSelectedItem();
         if (selectedLoaiThu == null) {
-            Toast.makeText(this, "Vui lòng chọn loại thu!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng chọn loại chi!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -131,7 +126,7 @@ public class AddKhoanChi extends AppCompatActivity {
 
         // Validate các trường input
         if (TextUtils.isEmpty(name)) {
-            edtName.setError("Vui lòng nhập tên khoản thu");
+            edtName.setError("Vui lòng nhập tên khoản chi");
             return;
         }
 
@@ -142,7 +137,7 @@ public class AddKhoanChi extends AppCompatActivity {
 
         // Kiểm tra loaiThuId hợp lệ
         if (loaiThuId <= 0) {
-            Toast.makeText(this, "Loại thu không hợp lệ!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Loại chi không hợp lệ!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -157,7 +152,7 @@ public class AddKhoanChi extends AppCompatActivity {
                 Toast.makeText(this, "Thêm khoản chi thất bại!", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Log.e("AddKhoanThu", "Error saving khoan thu: " + e.getMessage());
+            Log.e("AddKhoancchi", "Error saving khoan chi: " + e.getMessage());
             Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }

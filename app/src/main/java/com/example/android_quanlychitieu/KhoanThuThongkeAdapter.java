@@ -11,13 +11,13 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public class KhoanchiListAdapter extends ArrayAdapter<KhoanChi> {
+public class KhoanThuThongkeAdapter extends ArrayAdapter<KhoanThu> {
 
     private Context context;
-    private List<KhoanChi> khoanThuList;
+    private List<KhoanThu> khoanThuList;
 
-    public KhoanchiListAdapter(Context context, List<KhoanChi> khoanThuList) {
-        super(context, R.layout.item_thonke_chi, khoanThuList);
+    public KhoanThuThongkeAdapter(Context context, List<KhoanThu> khoanThuList) {
+        super(context, R.layout.item_thongke_thu, khoanThuList);
         this.context = context;
         this.khoanThuList = khoanThuList;
     }
@@ -26,17 +26,17 @@ public class KhoanchiListAdapter extends ArrayAdapter<KhoanChi> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_thonke_chi, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_thongke_thu, parent, false);
         }
 
-        KhoanChi khoanThu = khoanThuList.get(position);
+        KhoanThu khoanThu = khoanThuList.get(position);
 
         TextView tvNgayThu = convertView.findViewById(R.id.tvNgayThu);
         TextView tvTenKhoanThu = convertView.findViewById(R.id.tvTenKhoanThu);
         TextView tvSoTien = convertView.findViewById(R.id.tvSoTien);
 
-        tvNgayThu.setText("Ngày: " + khoanThu.getNgayChi());
-        tvTenKhoanThu.setText("Tên khoản thu: " + khoanThu.getTenKhoanChi());
+        tvNgayThu.setText("Ngày: " + khoanThu.getNgayThu());
+        tvTenKhoanThu.setText("Tên khoản thu: " + khoanThu.getTenKhoanThu());
         tvSoTien.setText("Tiền: +" + khoanThu.getSoTien() + "$");
 
         return convertView;

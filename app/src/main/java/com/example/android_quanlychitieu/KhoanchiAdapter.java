@@ -65,7 +65,7 @@ public class KhoanchiAdapter extends ArrayAdapter<KhoanChi> {
             btnDelete.setOnClickListener(v -> {
                 new AlertDialog.Builder(getContext())
                         .setTitle("Xác nhận xóa")
-                        .setMessage("Bạn có chắc chắn muốn xóa khoan  thu này?")
+                        .setMessage("Bạn có chắc chắn muốn xóa khoan  chi này?")
                         .setPositiveButton("Xóa", (dialog, which) -> {
 
                             Database db = new Database(getContext());

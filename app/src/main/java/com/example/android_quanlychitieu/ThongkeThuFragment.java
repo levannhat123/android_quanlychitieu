@@ -65,7 +65,7 @@ public class ThongkeThuFragment extends Fragment {
             List<KhoanThu> khoanThuList = db.getKhoanThuTheoNgay(startDate, endDate, userId);
             int count = db.countKhoanThuTheoNgay(startDate, endDate, userId);
 
-            KhoanThuListAdapter adapter = new KhoanThuListAdapter(getContext(), khoanThuList);
+            KhoanThuThongkeAdapter adapter = new KhoanThuThongkeAdapter(getContext(), khoanThuList);
             listViewKhoanThu.setAdapter(adapter);
 
             double tongTien = 0;

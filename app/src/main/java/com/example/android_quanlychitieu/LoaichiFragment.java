@@ -48,7 +48,7 @@ public class LoaichiFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (loaithuAdapter != null) {
-            loadLoaithu(userId);
+            loadLoaichi(userId);
             loaithuAdapter.notifyDataSetChanged();
         }
     }
@@ -65,7 +65,7 @@ public class LoaichiFragment extends Fragment {
             userId = getArguments().getInt("user_id", -1);
         }
 
-        Log.d("TAG", "user_id in LoaithuFragment: " + userId);
+        Log.d("TAG", "user_id in LoaiChiFragment: " + userId);
 
         if (userId == -1) {
             Toast.makeText(getContext(), "Lỗi: Không có user_id", Toast.LENGTH_SHORT).show();
@@ -77,7 +77,7 @@ public class LoaichiFragment extends Fragment {
         loaithuAdapter = new LoaiChiAdapter(requireContext(), loaichiList);
         listView.setAdapter(loaithuAdapter);
 
-        loadLoaithu(userId);
+        loadLoaichi(userId);
 
         fab = view.findViewById(R.id.fab_page);
         fab.setOnClickListener(v -> {
@@ -93,8 +93,8 @@ public class LoaichiFragment extends Fragment {
 
 
 
-    public void loadLoaithu(int userId) {
-        Log.d("loaiThu", "Loading loai thu for userId: " + userId);
+    public void loadLoaichi(int userId) {
+        Log.d("loaichi", "Loading loai chi for userId: " + userId);
         SQLiteDatabase dbsqlt = this.db.getReadableDatabase();
         Cursor cursor = null;
 
@@ -114,7 +114,7 @@ public class LoaichiFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
-            Log.e("LoaithuFragment", "Error loading Loaithu", e);
+            Log.e("LoaiChiFragment", "Error loading Loaichi", e);
         } finally {
             if (cursor != null) cursor.close();
         }

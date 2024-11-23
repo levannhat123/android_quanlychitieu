@@ -30,7 +30,7 @@ public class EditLoaiChi extends AppCompatActivity {
         idloaithu = getIntent().getIntExtra("loaichi_id", -1);
 
         if (userId == -1 || idloaithu == -1) {
-            Toast.makeText(this, "Không xác định được thông tin người dùng hoặc loại thu!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không xác định được thông tin người dùng hoặc loại chi!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -43,21 +43,21 @@ public class EditLoaiChi extends AppCompatActivity {
         btnSaveLoaithu.setOnClickListener(v -> {
             String loathuName = edtName.getText().toString().trim();
             if (loathuName.isEmpty()) {
-                edtName.setError("Tên loại thu không được để trống!");
+                edtName.setError("Tên loại chi không được để trống!");
                 edtName.requestFocus();
                 return;
             }
 
             boolean isTaskUpdated = database.updateLoaiChi(idloaithu, loathuName, userId);
             if (isTaskUpdated) {
-                Toast.makeText(this, "Cập nhật loại thu thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cập nhật loại chi thành công!", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent();
                 intent.putExtra("user_id", userId);
                 setResult(RESULT_OK, intent);
                 finish();
             } else {
-                Toast.makeText(this, "Cập nhật loại thu thất bại!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cập nhật loại chi thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
 
