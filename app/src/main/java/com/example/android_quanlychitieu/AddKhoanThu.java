@@ -46,8 +46,9 @@ public class AddKhoanThu extends AppCompatActivity {
         spLoaiThu = findViewById(R.id.spLoaiThu);
         btnSave = findViewById(R.id.btnSaveLoathu);
         btnCancel = findViewById(R.id.btnCancelLoathu);
-        edtNgayThu.setText(dateFormatter.format(calendar.getTime()));
+//        edtNgayThu.setText(dateFormatter.format(calendar.getTime()));
 
+        edtNgayThu.setOnClickListener(v -> showDatePickerDialog(edtNgayThu));
         userId = getIntent().getIntExtra("user_id", -1);
         if (userId == -1) {
             Toast.makeText(this, "User khoanthu ID không hợp lệ!", Toast.LENGTH_SHORT).show();
@@ -55,7 +56,6 @@ public class AddKhoanThu extends AppCompatActivity {
             return;
         }
 
-        setupDatePicker();
         loadLoaiThuSpinner();
         btnSave.setOnClickListener(v -> saveKhoanThu());
         btnCancel.setOnClickListener(v -> finish());
@@ -64,19 +64,7 @@ public class AddKhoanThu extends AppCompatActivity {
 
 
 
-    private void setupDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, monthOfYear);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            edtNgayThu.setText(dateFormatter.format(calendar.getTime()));
-        };
 
-        edtNgayThu.setOnClickListener(v -> new DatePickerDialog(AddKhoanThu.this, dateSetListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show());
-    }
 
     private void loadLoaiThuSpinner() {
         try {
@@ -104,7 +92,23 @@ public class AddKhoanThu extends AppCompatActivity {
             finish();
         }
     }
+    private void showDatePickerDialog(EditText editText) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String formattedDate = String.format("%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
+                    editText.setText(formattedDate);
+                },
+                year, month, day
+        );
+
+        datePickerDialog.show();
+    }
 
     private void saveKhoanThu() {
         if (loaiThuList == null || loaiThuList.isEmpty()) {
